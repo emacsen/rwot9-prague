@@ -145,6 +145,9 @@ simply a URL endpoint specific to the actor, e.g.
 should be using Object Capabilities model by which Inboxes are a capability
 handed out by a server.
 
+This proposal is flushed out in more detail in Christopher Webber's Paper
+[[https://gitlab.com/spritely/ocappub/blob/master/README.org][OcapPub: Towards networks of consent]].
+
 Without delving too far into the theory of object capabilities, we can imagine
 that the ability to send a message from one Actor to another is an action that
 we can grant explicit access to similarly to the way that access is granted to
@@ -153,31 +156,6 @@ recipient, the recipient must first provide the sender with a /capability/ to
 do so. This capability can be represented as a long randomly generated string.
 Its length and randomness make it impractical to guess and thus (in OCAP
 parlance) unforgeable.
-
-This act of the sender handing out capabilities may be done in a number of
- ways, though we suggest that offering a new Inbox could be performed as a new
- Activity, for example:
-
-#+NAME: OCAP_Inbox
-#+BEGIN_SRC JSON
-{"@context": "...",
- "type": "Inbox",
- "to": ["https://chatty.example/ben/"],
- "attributedTo": "https://social.example/alyssa/",
- "preferredInbox ["https://social.example/dbgxpggrez", "https://social.example/ptmihemlzj"]
-#+END_SRC
-
-In our example, we show multiple inboxes being offered. As part of the Object
-Capabilities model, these capabilities are transferable, which would allow one
-actor to send an inbox capability to another actor, for example in a situation
-where the recipient is a trusted party.
-
-If one Inbox becomes abused, we are able to trace back to exactly when and for
-who the Inbox was generated. We are also able to revoke the Inbox, stopping any
-future requests to it. An HTTP request sent to an expired Inbox should ideally
-result in an HTTP 410 (Gone)[fn:10], alerting the sending to the unavailability
-of the inbox and prompting it to request a new one if it wishes to resume
-communication.
 
 The OCAP Inbox model as described in this proposal would require little or no
 changes to existing deployed ActivityPub servers. In the case where an
